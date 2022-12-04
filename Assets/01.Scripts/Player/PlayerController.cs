@@ -11,7 +11,9 @@ public class PlayerController : MonoBehaviour
     [Header("[이동]")]
     public float moveSpeed = 0f;
     public float dashSpeed = 0f;
+    public float activitySpeed = 0f;
     public float jumpHeight = 0f;
+    public float turnSpeed = 0f;
     [SerializeField] private bool isGround = false;
 
     [Header("[공격]")]
@@ -20,6 +22,8 @@ public class PlayerController : MonoBehaviour
     [Header("[행동]")]
     public bool isJump = false;
     public bool isAttack = false;
+    public bool isGaurd = false;
+    public bool isHealing = false;
 
     [Header("[바닥 확인]")]
     public float groundCheckoffset = 0f;
@@ -45,6 +49,7 @@ public class PlayerController : MonoBehaviour
         Jump();
         Move();
         Attack();
+        Gaurd();
     }
 
     private void Move()
@@ -58,32 +63,45 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        if (Input.GetKey(KeyCode.LeftShift))
+        if (Mathf.Abs(x) > 0f || Mathf.Abs(z) > 0f)
         {
-            moveVector = new Vector3(-x * dashSpeed, verticalValue, -z * dashSpeed) * Time.deltaTime;
-            currentSpeed = dashSpeed;
+            currentSpeed = moveSpeed;
+
+            if (Input.GetKey(KeyCode.LeftShift))
+            {
+                currentSpeed = dashSpeed;
+            }
+
+            if(isGaurd || isHealing)
+            {
+                currentSpeed = activitySpeed;
+            }
+
+            moveVector = new Vector3(x * currentSpeed, verticalValue, z * currentSpeed);
+
+            Turn(new Vector3(moveVector.x, 0, moveVector.z).normalized);
         }
         else
         {
-            moveVector = new Vector3(-x * moveSpeed, verticalValue, -z * moveSpeed) * Time.deltaTime;
-
-            if (Mathf.Abs(x) > 0f || Mathf.Abs(z) > 0f)
-            {
-                currentSpeed = moveSpeed;
-            }
-            else
-            {
-                currentSpeed = 0f;
-            }
+            currentSpeed = 0f;
+            moveVector = new Vector3(0, verticalValue, 0);
         }
 
-        cc.Move(moveVector);
+        cc.Move(moveVector * Time.deltaTime);        
         animator.MoveAnim(dashSpeed, currentSpeed);
+    }
+
+    private void Turn(Vector3 direction)
+    {
+        float angle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
+
+        //transform.rotation = Quaternion.AngleAxis(angle, Vector3.up);
+        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.AngleAxis(angle, Vector3.up), Time.deltaTime * turnSpeed);
     }
 
     private void Jump()
     {
-        if(isAttack)
+        if(isAttack || isHealing || isJump)
         {
             return;
         }
@@ -130,7 +148,7 @@ public class PlayerController : MonoBehaviour
 
     private void Attack()
     {
-        if(isJump || isAttack)
+        if(isJump || isAttack || isHealing)
         {
             return;
         }
@@ -141,6 +159,38 @@ public class PlayerController : MonoBehaviour
 
             animator.AttackAnim();
         }        
+    }
+
+    private void Gaurd()
+    {
+        if(isAttack || isHealing)
+        {
+            return;
+        }
+
+        if(Input.GetMouseButton(1))
+        {
+            isGaurd = true;
+            animator.GaurdAnim();
+        }
+        else
+        {
+            isGaurd = false;
+            animator.EndOfGaurd();
+        }
+    }
+
+    private void Healing()
+    {
+        if(isAttack || isJump || isHealing)
+        {
+            return;
+        }
+
+        if(Input.GetKeyDown(KeyCode.R))
+        {
+            //
+        }
     }
 
 #if UNITY_EDITOR

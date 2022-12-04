@@ -10,6 +10,7 @@ public class PlayerAnimation : MonoBehaviour
     private int jumpHash = Animator.StringToHash("Jump");
     private int movementHash = Animator.StringToHash("Movement");
     private int attackHash = Animator.StringToHash("Attack");
+    private int gaurdHash = Animator.StringToHash("Gaurd");
 
     private void Awake()
     {
@@ -37,5 +38,15 @@ public class PlayerAnimation : MonoBehaviour
     public void EndOfAttack()
     {
         playerController.isAttack = false;
+    }
+
+    public void GaurdAnim()
+    {
+        animator.SetBool(gaurdHash, true);
+    }
+
+    public void EndOfGaurd()
+    {
+        animator.SetBool(gaurdHash, false);
     }
 }
