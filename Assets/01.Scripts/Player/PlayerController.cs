@@ -3,26 +3,30 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour, IDamage
 {
     [Header("[중력]")]
     public float gravityScale = -9.81f;
 
-    [Header("[이동]")]
+    [Header("[움직임]")]
     public float moveSpeed = 0f;
     public float dashSpeed = 0f;
+    public float dodgeSpeed = 0f;
     public float activitySpeed = 0f;
-    public float jumpHeight = 0f;
     public float turnSpeed = 0f;
     [SerializeField] private bool isGround = false;
+
+    [Header("[체력]")]
+    [SerializeField] private float maxHp = 0f;
+    [SerializeField] private float currentHp = 0f;
 
     [Header("[공격]")]
     public float attakcPower = 0f;
 
     [Header("[행동]")]
-    public bool isJump = false;
     public bool isAttack = false;
     public bool isGaurd = false;
+    public bool isDodge = false;
     public bool isHealing = false;
 
     [Header("[바닥 확인]")]
@@ -42,11 +46,16 @@ public class PlayerController : MonoBehaviour
         animator = GetComponent<PlayerAnimation>();
     }
 
+    private void Start()
+    {
+        currentHp = maxHp;
+    }
+
     private void Update()
     {
         CheckGround();
         Gravity();
-        Jump();
+        Dodge();
         Move();
         Attack();
         Gaurd();
@@ -63,43 +72,57 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        if (Mathf.Abs(x) > 0f || Mathf.Abs(z) > 0f)
+        if (isDodge)
         {
-            currentSpeed = moveSpeed;
-
-            if (Input.GetKey(KeyCode.LeftShift))
-            {
-                currentSpeed = dashSpeed;
-            }
-
-            if(isGaurd || isHealing)
-            {
-                currentSpeed = activitySpeed;
-            }
-
-            moveVector = new Vector3(x * currentSpeed, verticalValue, z * currentSpeed);
-
-            Turn(new Vector3(moveVector.x, 0, moveVector.z).normalized);
+            moveVector = transform.forward * dodgeSpeed;
         }
         else
         {
-            currentSpeed = 0f;
-            moveVector = new Vector3(0, verticalValue, 0);
-        }
+            if (Mathf.Abs(x) > 0f || Mathf.Abs(z) > 0f)
+            {
+                currentSpeed = moveSpeed;
 
-        cc.Move(moveVector * Time.deltaTime);        
-        animator.MoveAnim(dashSpeed, currentSpeed);
+                if (Input.GetKey(KeyCode.LeftShift))
+                {
+                    currentSpeed = dashSpeed;
+                }
+
+                if (isGaurd || isHealing)
+                {
+                    currentSpeed = activitySpeed;
+                }
+
+                moveVector = new Vector3(x * currentSpeed, verticalValue, z * currentSpeed);
+
+                Turn(new Vector3(moveVector.x, 0, moveVector.z).normalized, false);
+            }
+            else
+            {
+                currentSpeed = 0f;
+                moveVector = new Vector3(0, verticalValue, 0);
+            }
+
+            animator.MoveAnim(dashSpeed, currentSpeed);
+        }        
+
+        cc.Move(moveVector * Time.deltaTime);                
     }
 
-    private void Turn(Vector3 direction)
+    private void Turn(Vector3 direction, bool immediately)
     {
         float angle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
 
-        //transform.rotation = Quaternion.AngleAxis(angle, Vector3.up);
-        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.AngleAxis(angle, Vector3.up), Time.deltaTime * turnSpeed);
+        if(immediately)
+        {
+            transform.rotation = Quaternion.AngleAxis(angle, Vector3.up);
+        }
+        else
+        {
+            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.AngleAxis(angle, Vector3.up), Time.deltaTime * turnSpeed);
+        }      
     }
 
-    private void Jump()
+    /*private void Jump()
     {
         if(isAttack || isHealing || isJump)
         {
@@ -114,9 +137,12 @@ public class PlayerController : MonoBehaviour
                 verticalValue = Mathf.Sqrt(jumpHeight * -2 * gravityScale);
 
                 animator.JumpAnim();
+
+                isGaurd = false;
+                animator.EndOfGaurd();
             }
         }
-    }
+    }*/
 
     private void CheckGround()
     {
@@ -133,11 +159,6 @@ public class PlayerController : MonoBehaviour
             if (verticalValue < 0f)
             {
                 verticalValue = -2f;
-                
-                if(isJump)
-                {
-                    isJump = false;
-                }
             }
         }
         else
@@ -148,16 +169,20 @@ public class PlayerController : MonoBehaviour
 
     private void Attack()
     {
-        if(isJump || isAttack || isHealing)
+        if(isAttack || isHealing)
         {
             return;
         }
 
         if(Input.GetMouseButtonDown(0))
         {
+            Turn(new Vector3(moveVector.x, 0, moveVector.z).normalized, true);
             isAttack = true;
 
             animator.AttackAnim();
+
+            isGaurd = false;
+            animator.EndOfGaurd();           
         }        
     }
 
@@ -168,21 +193,42 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        if(Input.GetMouseButton(1))
+        if(Input.GetMouseButtonDown(1))
         {
+            Turn(new Vector3(moveVector.x, 0, moveVector.z).normalized, true);
             isGaurd = true;
             animator.GaurdAnim();
         }
-        else
+        else if(Input.GetMouseButtonUp(1))
         {
             isGaurd = false;
             animator.EndOfGaurd();
         }
     }
 
+    private void Dodge()
+    {
+        if(isAttack || isHealing || isDodge)
+        {
+            return;
+        }
+
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            Turn(new Vector3(moveVector.x, 0, moveVector.z).normalized,true);
+            isDodge = true;
+            animator.DodgeAnim();
+        }
+    }
+
+    public void EndOfDodge()
+    {
+        isDodge = false;
+    }
+
     private void Healing()
     {
-        if(isAttack || isJump || isHealing)
+        if(isAttack || isHealing)
         {
             return;
         }
@@ -191,6 +237,23 @@ public class PlayerController : MonoBehaviour
         {
             //
         }
+    }
+
+    public void Damaged(int damage, Vector3 direction)
+    {
+        currentHp -= damage;
+
+        //방향 따라 넉백
+
+        if(currentHp <= 0)
+        {
+            Die();
+        }
+    }
+
+    private void Die()
+    {
+        animator.DieAnim();
     }
 
 #if UNITY_EDITOR

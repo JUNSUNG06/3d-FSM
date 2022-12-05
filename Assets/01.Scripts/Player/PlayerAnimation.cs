@@ -7,10 +7,12 @@ public class PlayerAnimation : MonoBehaviour
     private Animator animator;
     private PlayerController playerController;
 
-    private int jumpHash = Animator.StringToHash("Jump");
     private int movementHash = Animator.StringToHash("Movement");
     private int attackHash = Animator.StringToHash("Attack");
     private int gaurdHash = Animator.StringToHash("Gaurd");
+    private int dieHash = Animator.StringToHash("Die");
+    private int healingHash = Animator.StringToHash("Healing");
+    private int dodgeHash = Animator.StringToHash("Dodge");
 
     private void Awake()
     {
@@ -23,11 +25,6 @@ public class PlayerAnimation : MonoBehaviour
         float threshold = currentSpeed / maxSpeed;
 
         animator.SetFloat(movementHash, threshold);
-    }
-
-    public void JumpAnim()
-    {
-        animator.SetTrigger(jumpHash);
     }
 
     public void AttackAnim()
@@ -48,5 +45,20 @@ public class PlayerAnimation : MonoBehaviour
     public void EndOfGaurd()
     {
         animator.SetBool(gaurdHash, false);
+    }
+
+    public void DieAnim()
+    {
+        animator.SetTrigger(dieHash);
+    }
+
+    public void HealingAnim()
+    {
+        animator.SetTrigger(healingHash);
+    }   
+
+    public void DodgeAnim()
+    {
+        animator.SetTrigger(dodgeHash);
     }
 }
