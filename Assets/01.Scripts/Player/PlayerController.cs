@@ -35,6 +35,7 @@ public class PlayerController : MonoBehaviour, IDamage
     public LayerMask groundLayer;
 
     private Vector3 moveVector = Vector3.zero;
+    private Vector3 moveDir = Vector3.zero;
     private float verticalValue = 0f;
 
     private CharacterController cc = null;
@@ -74,7 +75,7 @@ public class PlayerController : MonoBehaviour, IDamage
 
         if (isDodge)
         {
-            moveVector = transform.forward * dodgeSpeed;
+            moveVector = moveDir.normalized * dodgeSpeed;
         }
         else
         {
@@ -93,6 +94,7 @@ public class PlayerController : MonoBehaviour, IDamage
                 }
 
                 moveVector = new Vector3(x * currentSpeed, verticalValue, z * currentSpeed);
+                moveDir = new Vector3(moveVector.x, 0, moveVector.z);
 
                 Turn(new Vector3(moveVector.x, 0, moveVector.z).normalized, false);
             }
@@ -103,8 +105,8 @@ public class PlayerController : MonoBehaviour, IDamage
             }
 
             animator.MoveAnim(dashSpeed, currentSpeed);
-        }        
-
+        }
+        
         cc.Move(moveVector * Time.deltaTime);                
     }
 
@@ -176,7 +178,7 @@ public class PlayerController : MonoBehaviour, IDamage
 
         if(Input.GetMouseButtonDown(0))
         {
-            Turn(new Vector3(moveVector.x, 0, moveVector.z).normalized, true);
+            Turn(moveDir.normalized, true);
             isAttack = true;
 
             animator.AttackAnim();
@@ -195,7 +197,7 @@ public class PlayerController : MonoBehaviour, IDamage
 
         if(Input.GetMouseButtonDown(1))
         {
-            Turn(new Vector3(moveVector.x, 0, moveVector.z).normalized, true);
+            Turn(moveDir.normalized, true);
             isGaurd = true;
             animator.GaurdAnim();
         }
@@ -215,7 +217,7 @@ public class PlayerController : MonoBehaviour, IDamage
 
         if(Input.GetKeyDown(KeyCode.Space))
         {
-            Turn(new Vector3(moveVector.x, 0, moveVector.z).normalized,true);
+            Turn(moveDir.normalized,true);
             isDodge = true;
             animator.DodgeAnim();
         }
