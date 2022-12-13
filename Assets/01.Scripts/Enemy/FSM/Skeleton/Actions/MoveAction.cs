@@ -6,6 +6,6 @@ public class MoveAction : AIAction
 {
     public override void TakeAction()
     {
-        Debug.Log("Move");
+        
     }
 }

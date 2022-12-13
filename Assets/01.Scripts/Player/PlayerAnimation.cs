@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerAnimation : MonoBehaviour
 {
+    public float ChangeMovementAnimSpeed = 0f;
+
     private Animator animator;
     private PlayerController playerController;
 
@@ -24,7 +26,7 @@ public class PlayerAnimation : MonoBehaviour
     {
         float threshold = currentSpeed / maxSpeed;
 
-        animator.SetFloat(movementHash, threshold);
+        animator.SetFloat(movementHash, Mathf.Lerp(animator.GetFloat(movementHash), threshold, Time.deltaTime * ChangeMovementAnimSpeed));
     }
 
     public void AttackAnim()

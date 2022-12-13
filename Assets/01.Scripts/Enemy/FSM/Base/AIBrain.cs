@@ -6,9 +6,12 @@ public class AIBrain : MonoBehaviour
 {
     [SerializeField] AIState currentState;
 
+    private CharacterController characterController;
+
     private void Start()
     {
         currentState = transform.Find("AI/IdleState").GetComponent<AIState>();    
+        characterController = GetComponent<CharacterController>();
     }
 
     private void Update()
@@ -19,5 +22,15 @@ public class AIBrain : MonoBehaviour
     public void ChangeState(AIState nextState)
     {
         currentState = nextState;
+    }
+
+    public void Move()
+    {
+
+    }
+
+    public void StopMove()
+    {
+
     }
 }
