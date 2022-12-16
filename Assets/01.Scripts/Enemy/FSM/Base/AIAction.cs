@@ -4,5 +4,6 @@ using UnityEngine;
 
 public abstract class AIAction : MonoBehaviour
 {
+    public virtual void OnStartAction() { }
     public abstract void TakeAction();
 }

@@ -106,7 +106,9 @@ public class PlayerController : MonoBehaviour, IDamage
 
             animator.MoveAnim(dashSpeed, currentSpeed);
         }
-        
+
+        moveVector.y = verticalValue;
+
         cc.Move(moveVector * Time.deltaTime);                
     }
 
@@ -124,6 +126,7 @@ public class PlayerController : MonoBehaviour, IDamage
         }      
     }
 
+    #region Á¡ÇÁ(Æó±â)
     /*private void Jump()
     {
         if(isAttack || isHealing || isJump)
@@ -145,6 +148,7 @@ public class PlayerController : MonoBehaviour, IDamage
             }
         }
     }*/
+    #endregion
 
     private void CheckGround()
     {

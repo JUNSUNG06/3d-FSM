@@ -4,13 +4,12 @@ using UnityEngine;
 
 public class AIBrain : MonoBehaviour
 {
-    [SerializeField] AIState currentState;
+    public AIState currentState;
 
     private CharacterController characterController;
 
     private void Start()
-    {
-        currentState = transform.Find("AI/IdleState").GetComponent<AIState>();    
+    {  
         characterController = GetComponent<CharacterController>();
     }
 
@@ -22,6 +21,7 @@ public class AIBrain : MonoBehaviour
     public void ChangeState(AIState nextState)
     {
         currentState = nextState;
+        currentState.StateStart();
     }
 
     public void Move()
