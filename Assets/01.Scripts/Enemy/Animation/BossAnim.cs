@@ -4,15 +4,24 @@ using UnityEngine;
 
 public class BossAnim : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    private Animator animator;
+
+    private int movementHash = Animator.StringToHash("Movement");
+
+    public float animChangeSpeed = 0f;
+
+    private void Awake()
     {
-        
+        animator = GetComponent<Animator>();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void IdleAnim()
     {
-        
+        animator.SetFloat(movementHash, Mathf.Lerp(animator.GetFloat(movementHash), 0f, Time.deltaTime * animChangeSpeed));
+    }
+
+    public void MoveAnim()
+    {
+        animator.SetFloat(movementHash, Mathf.Lerp(animator.GetFloat(movementHash), 1, Time.deltaTime * animChangeSpeed));
     }
 }
