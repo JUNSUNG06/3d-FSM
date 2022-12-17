@@ -59,6 +59,13 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
+      - time: 0.4219858
+        functionName: CheckAttack
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 01092b11d8dfa144391c5e26125a7601, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       - time: 1
         functionName: EndOfAttack
         data: 

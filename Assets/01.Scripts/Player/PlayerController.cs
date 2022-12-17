@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
-public class PlayerController : MonoBehaviour, IDamage
+public class PlayerController : MonoBehaviour
 {
     [Header("[중력]")]
     public float gravityScale = -9.81f;
@@ -15,10 +15,6 @@ public class PlayerController : MonoBehaviour, IDamage
     public float activitySpeed = 0f;
     public float turnSpeed = 0f;
     [SerializeField] private bool isGround = false;
-
-    [Header("[체력]")]
-    [SerializeField] private float maxHp = 0f;
-    [SerializeField] private float currentHp = 0f;
 
     [Header("[공격]")]
     public float attakcPower = 0f;
@@ -45,11 +41,6 @@ public class PlayerController : MonoBehaviour, IDamage
     {
         cc = GetComponent<CharacterController>();
         animator = GetComponent<PlayerAnimation>();
-    }
-
-    private void Start()
-    {
-        currentHp = maxHp;
     }
 
     private void Update()
@@ -232,28 +223,13 @@ public class PlayerController : MonoBehaviour, IDamage
         isDodge = false;
     }
 
-    private void Healing()
+    public void CheckAttack()
     {
-        if(isAttack || isHealing)
+        Collider[] col = Physics.OverlapSphere(transform.position + Vector3.forward + Vector3.up, 0.5f, 1 << 9);
+
+        if(col.Length > 0)
         {
-            return;
-        }
-
-        if(Input.GetKeyDown(KeyCode.R))
-        {
-            //
-        }
-    }
-
-    public void Damaged(int damage, Vector3 direction)
-    {
-        currentHp -= damage;
-
-        //방향 따라 넉백
-
-        if(currentHp <= 0)
-        {
-            Die();
+            col[0].GetComponent<IDamage>().Damaged(attakcPower, Vector3.zero);
         }
     }
 
@@ -270,6 +246,7 @@ public class PlayerController : MonoBehaviour, IDamage
             transform.position.z);
 
         Gizmos.DrawWireSphere(groundCheckPosition, groundCheckRadius);
+        Gizmos.DrawWireSphere(transform.position + transform.forward * 0.7f + Vector3.up, 0.35f);
     }
 #endif
 }

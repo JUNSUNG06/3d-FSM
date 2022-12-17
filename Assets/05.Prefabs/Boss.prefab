@@ -60,7 +60,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55433970620b4864382e1d5ed4f02d51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  time: 5
+  time: 1
   currentTime: 0
 --- !u!1 &1342815252
 GameObject:
@@ -104,6 +104,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1348997729}
   - component: {fileID: 1348997730}
+  - component: {fileID: 1348997731}
   m_Layer: 0
   m_Name: IdleState
   m_TagString: Untagged
@@ -138,9 +139,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5607bf4fafef8a74e848431ad3f3b202, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  actions: []
+  actions:
+  - {fileID: 1348997731}
   transitions:
   - {fileID: 1182972937}
+--- !u!114 &1348997731
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1348997728}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe235e717433a5543990f62bf33ccfd1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1861320378
 GameObject:
   m_ObjectHideFlags: 0
@@ -151,6 +165,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1861320379}
   - component: {fileID: 1861320380}
+  - component: {fileID: 1861320381}
   m_Layer: 0
   m_Name: MoveState
   m_TagString: Untagged
@@ -185,8 +200,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   actions:
-  - {fileID: 0}
+  - {fileID: 1861320381}
   transitions: []
+--- !u!114 &1861320381
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1861320378}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d207304ac3cb48b408232d26a6b3e7f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6059598476181026184
 GameObject:
   m_ObjectHideFlags: 0
@@ -727,7 +754,10 @@ GameObject:
   - component: {fileID: 6056758389299787108}
   - component: {fileID: 6147332345481371676}
   - component: {fileID: 762435673}
-  m_Layer: 0
+  - component: {fileID: 762435676}
+  - component: {fileID: 6145968424524771777}
+  - component: {fileID: 762435674}
+  m_Layer: 9
   m_Name: Boss
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -765,7 +795,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: 5aec4cf50e7404442bf127243fa0b6d3, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
-  m_ApplyRootMotion: 1
+  m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
@@ -783,7 +813,57 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77527dc3b56e2bb4382a074947be9454, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentState: {fileID: 1861320380}
+  currentState: {fileID: 1348997730}
+  status: {fileID: 11400000, guid: 5c31f8f9282880042bee9d7b5e4a2612, type: 2}
+  target: {fileID: 0}
+--- !u!65 &762435676
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6059868900791511246}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.7, y: 1.96, z: 0.73}
+  m_Center: {x: 0, y: 1, z: 0}
+--- !u!195 &6145968424524771777
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6059868900791511246}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 2
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 1.7
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
+--- !u!114 &762435674
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6059868900791511246}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9922fb321adb25a4d974eab01033efaa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animChangeSpeed: 5
 --- !u!1 &6059963437405954976
 GameObject:
   m_ObjectHideFlags: 0
