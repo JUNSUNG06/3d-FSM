@@ -5,12 +5,15 @@ using UnityEngine;
 public class AIBrain : MonoBehaviour
 {
     public AIState currentState;
+    public EnemyStatusSO status;
 
     private CharacterController characterController;
+    public Transform target;
 
     private void Start()
     {  
         characterController = GetComponent<CharacterController>();
+        target = GameObject.Find("Player").GetComponent<Transform>();
     }
 
     private void Update()
@@ -22,15 +25,5 @@ public class AIBrain : MonoBehaviour
     {
         currentState = nextState;
         currentState.StateStart();
-    }
-
-    public void Move()
-    {
-
-    }
-
-    public void StopMove()
-    {
-
     }
 }
