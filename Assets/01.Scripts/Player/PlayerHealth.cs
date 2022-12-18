@@ -1,15 +1,17 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour, IDamage
 {
-    [SerializeField] private float maxHealth = 0f;
-    [SerializeField] private float health = 0f;
+    public float maxHealth = 0f;
+    public float Health { get; set; }
 
+    public Action damagedEvent;
     private void Start()
     {
-        health = maxHealth;
+        Health = maxHealth;
     }
 
     private void Update()
@@ -32,11 +34,12 @@ public class PlayerHealth : MonoBehaviour, IDamage
 
     public void Damaged(float damage, Vector3 direction)
     {
-        health -= damage;
+        Health -= damage;
 
+        damagedEvent();
         //방향 따라 넉백
 
-        if (health <= 0)
+        if (Health <= 0)
         {
             Die();
         }
