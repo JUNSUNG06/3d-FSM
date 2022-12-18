@@ -25,6 +25,12 @@ public class PlayerController : MonoBehaviour
     public bool isDodge = false;
     public bool isHealing = false;
 
+    [Header("[Çàµ¿º° ÇÊ¿ä Èû]")]
+    public float dashNPower = 0;
+    public float dodgeNPower = 0f;
+    public float gaurdNPower = 0f;
+    public float attackNPower = 0f;
+
     [Header("[¹Ù´Ú È®ÀÎ]")]
     public float groundCheckoffset = 0f;
     public float groundCheckRadius = 0;
@@ -36,11 +42,13 @@ public class PlayerController : MonoBehaviour
 
     private CharacterController cc = null;
     private PlayerAnimation animator = null;
+    private PlayerPower powerControl = null;
 
     private void Awake()
     {
         cc = GetComponent<CharacterController>();
         animator = GetComponent<PlayerAnimation>();
+        powerControl = GetComponent<PlayerPower>();
     }
 
     private void Update()
@@ -67,6 +75,11 @@ public class PlayerController : MonoBehaviour
         if (isDodge)
         {
             moveVector = moveDir.normalized * dodgeSpeed;
+
+            if(moveDir == Vector3.zero)
+            {
+                moveVector = transform.forward * dodgeSpeed;
+            }
         }
         else
         {
@@ -74,9 +87,10 @@ public class PlayerController : MonoBehaviour
             {
                 currentSpeed = moveSpeed;
 
-                if (Input.GetKey(KeyCode.LeftShift))
+                if (Input.GetKey(KeyCode.LeftShift) && powerControl.canActive(dashNPower * Time.deltaTime))
                 {
                     currentSpeed = dashSpeed;
+                    powerControl.DecreasePower(dashNPower * Time.deltaTime);
                 }
 
                 if (isGaurd || isHealing)
@@ -166,7 +180,7 @@ public class PlayerController : MonoBehaviour
 
     private void Attack()
     {
-        if(isAttack || isHealing)
+        if(isAttack || isHealing || !powerControl.canActive(attackNPower))
         {
             return;
         }
@@ -175,6 +189,7 @@ public class PlayerController : MonoBehaviour
         {
             Turn(moveDir.normalized, true);
             isAttack = true;
+            powerControl.DecreasePower(attackNPower);
 
             animator.AttackAnim();
 
@@ -205,7 +220,7 @@ public class PlayerController : MonoBehaviour
 
     private void Dodge()
     {
-        if(isAttack || isHealing || isDodge)
+        if(isAttack || isHealing || isDodge || !powerControl.canActive(dodgeNPower))
         {
             return;
         }
@@ -214,6 +229,7 @@ public class PlayerController : MonoBehaviour
         {
             Turn(moveDir.normalized,true);
             isDodge = true;
+            powerControl.DecreasePower(dodgeNPower);
             animator.DodgeAnim();
         }
     }

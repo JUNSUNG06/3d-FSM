@@ -7,6 +7,7 @@ public class BossAnim : MonoBehaviour
     private Animator animator;
 
     private int movementHash = Animator.StringToHash("Movement");
+    private int dieHash = Animator.StringToHash("Die");
 
     public float animChangeSpeed = 0f;
 
@@ -23,5 +24,10 @@ public class BossAnim : MonoBehaviour
     public void MoveAnim()
     {
         animator.SetFloat(movementHash, Mathf.Lerp(animator.GetFloat(movementHash), 1, Time.deltaTime * animChangeSpeed));
+    }
+
+    public void DieAnim()
+    {
+        animator.SetTrigger(dieHash);
     }
 }

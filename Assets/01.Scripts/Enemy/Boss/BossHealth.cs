@@ -1,23 +1,29 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class BossHealth : MonoBehaviour, IDamage
 {
-    [SerializeField] private float currentHealth = 0f;
+    public float maxHealth = 0f;
+    public float Health { get; set; }
+
+    public Action damagedEvent;
 
     private void Start()
     {
-        currentHealth = GetComponent<AIBrain>().status.maxHealth;
+        Health = maxHealth;
     }
 
     public void Damaged(float damage, Vector3 direction)
     {
         Debug.Log("boss damaged");
 
-        currentHealth -= damage;
+        Health -= damage;
+        damagedEvent?.Invoke();
 
-        if(currentHealth <= 0f)
+        if(Health <= 0f)
         {
             Die();
         }
@@ -27,5 +33,7 @@ public class BossHealth : MonoBehaviour, IDamage
     private void Die()
     {
         Debug.Log("die");
+
+        GetComponent<BossAnim>().DieAnim();
     }
 }
