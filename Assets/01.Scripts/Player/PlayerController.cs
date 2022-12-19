@@ -241,17 +241,12 @@ public class PlayerController : MonoBehaviour
 
     public void CheckAttack()
     {
-        Collider[] col = Physics.OverlapSphere(transform.position + Vector3.forward + Vector3.up, 0.5f, 1 << 9);
+        Collider[] col = Physics.OverlapSphere(transform.position + transform.forward * 0.7f + Vector3.up, 0.35f, 1 << 9);
 
         if(col.Length > 0)
         {
             col[0].GetComponent<IDamage>().Damaged(attakcPower, Vector3.zero);
         }
-    }
-
-    private void Die()
-    {
-        animator.DieAnim();
     }
 
 #if UNITY_EDITOR

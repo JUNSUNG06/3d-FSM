@@ -30,4 +30,9 @@ public class BossAnim : MonoBehaviour
     {
         animator.SetTrigger(dieHash);
     }
+
+    public void AttackAnim(string attackType)
+    {
+        animator.SetTrigger(attackType);
+    }
 }

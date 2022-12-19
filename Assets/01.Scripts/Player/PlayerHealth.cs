@@ -47,6 +47,6 @@ public class PlayerHealth : MonoBehaviour, IDamage
 
     private void Die()
     {
-        Debug.Log("player die");
+        GetComponent<PlayerAnimation>().DieAnim();
     }
 }

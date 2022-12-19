@@ -60,6 +60,36 @@ Transform:
   m_Father: {fileID: 4267273955395124}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: -185.462, y: 90, z: 90}
+--- !u!1 &1771421985
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1771421986}
+  m_Layer: 0
+  m_Name: CameraFollowPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1771421986
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1771421985}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.314, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4845623230771956}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1023315775279318
 GameObject:
   m_ObjectHideFlags: 0
@@ -877,6 +907,8 @@ GameObject:
   - component: {fileID: 1142877293}
   - component: {fileID: 1142877297}
   - component: {fileID: 1142877295}
+  - component: {fileID: 6141572562687877263}
+  - component: {fileID: 1479255561000787276}
   m_Layer: 0
   m_Name: Chr_Hero_Male_01
   m_TagString: Untagged
@@ -899,6 +931,7 @@ Transform:
   - {fileID: 4948346616872564}
   - {fileID: 3544930236449534321}
   - {fileID: 2566225621101854963}
+  - {fileID: 1771421986}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -971,11 +1004,15 @@ MonoBehaviour:
   activitySpeed: 1.5
   turnSpeed: 10
   isGround: 0
-  attakcPower: 0
+  attakcPower: 100
   isAttack: 0
   isGaurd: 0
   isDodge: 0
   isHealing: 0
+  dashNPower: 10
+  dodgeNPower: 20
+  gaurdNPower: 20
+  attackNPower: 15
   groundCheckoffset: 0
   groundCheckRadius: 0.15
   groundLayer:
@@ -1010,6 +1047,34 @@ MonoBehaviour:
   - m_Rig: {fileID: 0}
     m_Active: 1
   m_Effectors: []
+--- !u!114 &6141572562687877263
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1596485419112710}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea4973ba490c6d94d8947cc142b4704e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+--- !u!114 &1479255561000787276
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1596485419112710}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2449f95958f8bf048952db857441c25f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxPower: 100
+  recoveryTime: 3
+  recoveryAmount: 15
 --- !u!1 &1599825728447078
 GameObject:
   m_ObjectHideFlags: 0
