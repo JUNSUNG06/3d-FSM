@@ -33,7 +33,6 @@ public class BossAttackManage : MonoBehaviour
     {
         nav.destination = brain.target.position;
         Debug.Log(brain.target.position);
-        //nav.speed = jumpSpeed;
     }
 
     public void EndJumpAttack()
@@ -43,7 +42,7 @@ public class BossAttackManage : MonoBehaviour
 
     public void CheckJumpAttackHit()
     {
-        Collider[] col = Physics.OverlapSphere(transform.position, 3f, 1 << 10);
+        Collider[] col = Physics.OverlapSphere(transform.position, 4f, 1 << 10);
 
         if (col.Length > 0)
         {

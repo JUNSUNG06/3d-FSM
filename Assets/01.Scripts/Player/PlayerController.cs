@@ -39,12 +39,17 @@ public class PlayerController : MonoBehaviour
 
     private Vector3 moveVector = Vector3.zero;
     private Vector3 moveDir = Vector3.zero;
+    private Vector3 dodgeDir = Vector3.zero;
+    private Vector3 forward = Vector3.zero;
     private float verticalValue = 0f;
 
     private CharacterController cc = null;
     public PlayerAnimation animator = null;
     private PlayerPower powerControl = null;
     private PlayerHealth healthControl = null;
+    public Transform cameraArm;
+
+    private bool dodgeToCameraDir = false;
 
     private void Awake()
     {
@@ -70,6 +75,7 @@ public class PlayerController : MonoBehaviour
         float x = Input.GetAxisRaw("Horizontal");
         float z = Input.GetAxisRaw("Vertical");
         float currentSpeed = 0f;
+        forward = new Vector3(cameraArm.forward.x, 0, cameraArm.forward.z).normalized;
 
         if(isAttack || isHealing || isGaurd)
         {
@@ -78,11 +84,19 @@ public class PlayerController : MonoBehaviour
 
         if (isDodge)
         {
-            moveVector = moveDir.normalized * dodgeSpeed;
-
-            if(moveDir == Vector3.zero)
+            if((Mathf.Abs(x) <= 0f && Mathf.Abs(z) <= 0f))
             {
-                moveVector = transform.forward * dodgeSpeed;
+                moveVector = dodgeDir * dodgeSpeed;
+                dodgeToCameraDir = true;
+                Turn(dodgeDir, true);
+            }
+            else
+            {
+                if(!dodgeToCameraDir)
+                {
+                    moveVector = moveDir * dodgeSpeed;
+                    Turn(moveDir, true);
+                } 
             }
         }
         else
@@ -102,10 +116,10 @@ public class PlayerController : MonoBehaviour
                     currentSpeed = activitySpeed;
                 }
 
-                moveVector = new Vector3(x * currentSpeed, verticalValue, z * currentSpeed);
-                moveDir = new Vector3(moveVector.x, 0, moveVector.z);
-
-                Turn(new Vector3(moveVector.x, 0, moveVector.z).normalized, false);
+                Vector3 cameraArmRight = new Vector3(cameraArm.right.x, 0, cameraArm.right.z);
+                moveVector = (forward * z + cameraArmRight * x) * currentSpeed;
+                moveDir = moveVector.normalized;
+                Turn(moveVector.normalized, false);
             }
             else
             {
@@ -113,6 +127,7 @@ public class PlayerController : MonoBehaviour
                 moveVector = new Vector3(0, verticalValue, 0);
             }
 
+            dodgeDir = forward;
             animator.MoveAnim(dashSpeed, currentSpeed);
         }
 
@@ -172,7 +187,7 @@ public class PlayerController : MonoBehaviour
         if (isGround)
         {
             if (verticalValue < 0f)
-            {
+            {                                                                                   
                 verticalValue = -2f;
             }
         }
@@ -191,7 +206,7 @@ public class PlayerController : MonoBehaviour
 
         if(Input.GetMouseButtonDown(0))
         {
-            Turn(moveDir.normalized, true);
+            Turn(forward, true);
             isAttack = true;
             powerControl.DecreasePower(attackNPower);
 
@@ -248,6 +263,7 @@ public class PlayerController : MonoBehaviour
     public void EndOfDodge()
     {
         isDodge = false;
+        dodgeToCameraDir = false;
     }
 
     private void Healing()
@@ -278,6 +294,7 @@ public class PlayerController : MonoBehaviour
         if(col.Length > 0)
         {
             col[0].GetComponent<IDamage>().Damaged(attakcPower, Vector3.zero);
+            PlayerCamera.Instance.ShakeCam(3, 0.1f);
         }
     }
 
