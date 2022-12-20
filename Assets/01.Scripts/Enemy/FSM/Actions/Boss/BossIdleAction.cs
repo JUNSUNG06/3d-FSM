@@ -1,12 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class BossIdleAction : AIAction
 {
     private BossAnim anim;
 
-    private void Start()
+    public float turnSpeed;
+
+    protected override void Start()
     {
         base.Start();
 
@@ -15,6 +18,20 @@ public class BossIdleAction : AIAction
 
     public override void TakeAction()
     {
-        anim.IdleAnim();   
+        anim.IdleAnim();
+        Idle();
     }    
+
+    private void Idle()
+    {
+        Turn();
+    }
+
+    private void Turn()
+    {
+        Vector3 dir = (brain.target.position - brain.transform.position).normalized;
+        float angle = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg;
+        brain.transform.localRotation = Quaternion.Lerp(brain.transform.localRotation, Quaternion.Euler(0, angle, 0),
+            Time.deltaTime * turnSpeed);
+    }
 }

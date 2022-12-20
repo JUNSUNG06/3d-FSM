@@ -6,7 +6,7 @@ public abstract class AIDecision : MonoBehaviour
 {
     protected AIBrain brain;
 
-    private void Start()
+    protected virtual void Start()
     {
         brain = transform.parent.parent.parent.GetComponent<AIBrain>();    
     }

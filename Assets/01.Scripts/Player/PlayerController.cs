@@ -24,6 +24,7 @@ public class PlayerController : MonoBehaviour
     public bool isGaurd = false;
     public bool isDodge = false;
     public bool isHealing = false;
+    public int healCount = 0;
 
     [Header("[행동별 필요 힘]")]
     public float dashNPower = 0;
@@ -41,14 +42,16 @@ public class PlayerController : MonoBehaviour
     private float verticalValue = 0f;
 
     private CharacterController cc = null;
-    private PlayerAnimation animator = null;
+    public PlayerAnimation animator = null;
     private PlayerPower powerControl = null;
+    private PlayerHealth healthControl = null;
 
     private void Awake()
     {
         cc = GetComponent<CharacterController>();
         animator = GetComponent<PlayerAnimation>();
         powerControl = GetComponent<PlayerPower>();
+        healthControl = GetComponent<PlayerHealth>();
     }
 
     private void Update()
@@ -59,6 +62,7 @@ public class PlayerController : MonoBehaviour
         Move();
         Attack();
         Gaurd();
+        Healing();
     }
 
     private void Move()
@@ -67,7 +71,7 @@ public class PlayerController : MonoBehaviour
         float z = Input.GetAxisRaw("Vertical");
         float currentSpeed = 0f;
 
-        if(isAttack)
+        if(isAttack || isHealing || isGaurd)
         {
             return;
         }
@@ -87,7 +91,7 @@ public class PlayerController : MonoBehaviour
             {
                 currentSpeed = moveSpeed;
 
-                if (Input.GetKey(KeyCode.LeftShift) && powerControl.canActive(dashNPower * Time.deltaTime))
+                if (Input.GetKey(KeyCode.LeftShift) && powerControl.CanActive(dashNPower * Time.deltaTime))
                 {
                     currentSpeed = dashSpeed;
                     powerControl.DecreasePower(dashNPower * Time.deltaTime);
@@ -180,7 +184,7 @@ public class PlayerController : MonoBehaviour
 
     private void Attack()
     {
-        if(isAttack || isHealing || !powerControl.canActive(attackNPower))
+        if(isAttack || isHealing || !powerControl.CanActive(attackNPower))
         {
             return;
         }
@@ -200,7 +204,13 @@ public class PlayerController : MonoBehaviour
 
     private void Gaurd()
     {
-        if(isAttack || isHealing)
+        if (!powerControl.CanActive(gaurdNPower))
+        {
+            isGaurd = false;
+            animator.EndOfGaurd();
+        }
+
+        if (isAttack || isHealing || !powerControl.CanActive(gaurdNPower))
         {
             return;
         }
@@ -215,12 +225,12 @@ public class PlayerController : MonoBehaviour
         {
             isGaurd = false;
             animator.EndOfGaurd();
-        }
+        }   
     }
 
     private void Dodge()
     {
-        if(isAttack || isHealing || isDodge || !powerControl.canActive(dodgeNPower))
+        if(isAttack || isHealing || isDodge || !powerControl.CanActive(dodgeNPower))
         {
             return;
         }
@@ -234,9 +244,31 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+
     public void EndOfDodge()
     {
         isDodge = false;
+    }
+
+    private void Healing()
+    {
+        if (isAttack || isHealing || isDodge || isGaurd || healCount <= 0)
+        {
+            return;
+        }
+        
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            animator.HealingAnim();
+            isHealing = true;
+            healthControl.Damaged(-healthControl.maxHealth * 7 * 0.1f, Vector3.zero);
+            healCount--;
+        }
+    }
+
+    public void EndOfHealing()
+    {
+        isHealing = false;
     }
 
     public void CheckAttack()

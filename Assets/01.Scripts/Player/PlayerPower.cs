@@ -17,7 +17,7 @@ public class PlayerPower : MonoBehaviour
         Mathf.Clamp(Power, maxPower, 0f);
     }
 
-    public bool canActive(float necessaryPower)
+    public bool CanActive(float necessaryPower)
     {
         return Power >= necessaryPower;
     }
@@ -25,16 +25,16 @@ public class PlayerPower : MonoBehaviour
     public void DecreasePower(float usePower)
     {
         Power -= usePower;
+        Power = Mathf.Clamp(Power, 0f, maxPower);
         activeEvent?.Invoke();
 
         StopCoroutine("RecoveryPower");
-        StartCoroutine("RecoveryPower");
+        StartCoroutine("RecoveryPower");      
     }
 
     IEnumerator RecoveryPower()
     {
         yield return new WaitForSeconds(recoveryTime);
-        Debug.Log("1");
 
         while(Power < maxPower)
         {

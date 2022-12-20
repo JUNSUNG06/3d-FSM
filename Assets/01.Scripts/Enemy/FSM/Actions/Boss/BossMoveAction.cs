@@ -8,12 +8,19 @@ public class BossMoveAction : AIAction
     private NavMeshAgent nav;
     private BossAnim anim;
 
-    private void Start()
+
+
+    protected override void Start()
     {
         base.Start();
 
         nav = brain.GetComponent<NavMeshAgent>();
         anim = brain.GetComponent<BossAnim>();
+    }
+
+    public override void OnStartAction()
+    {
+        nav.speed = brain.status.moveSpeed;
     }
 
     public override void TakeAction()

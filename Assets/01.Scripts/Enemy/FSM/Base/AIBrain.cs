@@ -10,9 +10,6 @@ public class AIBrain : MonoBehaviour
     private CharacterController characterController;
     public Transform target;
 
-    public bool isAttack = false;
-    public float attackPower = 0f;
-
     private void Start()
     {  
         characterController = GetComponent<CharacterController>();
@@ -30,20 +27,7 @@ public class AIBrain : MonoBehaviour
         currentState.StateStart();
     }
 
-    public void CheckHit()
-    {
-        Collider[] col = Physics.OverlapSphere(transform.position + transform.forward + Vector3.up, 1f, 1 << 10);
 
-        if (col.Length > 0)
-        {
-            col[0].GetComponent<IDamage>().Damaged(attackPower, Vector3.zero);
-        }
-    }
-
-    public void EndOfAttack()
-    {
-        isAttack = false;
-    }
 
     public void OnDrawGizmosSelected()
     {

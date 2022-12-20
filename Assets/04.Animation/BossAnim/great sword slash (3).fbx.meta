@@ -62,14 +62,14 @@ ModelImporter:
       - time: 0.5384149
         functionName: CheckHit
         data: 
-        objectReferenceParameter: {fileID: 11500000, guid: 77527dc3b56e2bb4382a074947be9454, type: 3}
+        objectReferenceParameter: {fileID: 11500000, guid: 7c32d8216492fe4409e8e0ec11ac7b90, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
       - time: 1
         functionName: EndOfAttack
         data: 
-        objectReferenceParameter: {fileID: 11500000, guid: 77527dc3b56e2bb4382a074947be9454, type: 3}
+        objectReferenceParameter: {fileID: 11500000, guid: 7c32d8216492fe4409e8e0ec11ac7b90, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0

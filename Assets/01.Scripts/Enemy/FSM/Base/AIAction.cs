@@ -6,9 +6,10 @@ public abstract class AIAction : MonoBehaviour
 {
     protected AIBrain brain;
 
-    protected void Start()
+    protected virtual void Start()
     {
         brain = transform.parent.parent.GetComponent<AIBrain>();
+        Debug.Log(111);
     }
 
     public virtual void OnStartAction() { }

@@ -8,33 +8,34 @@ public class PlayerHealth : MonoBehaviour, IDamage
     public float maxHealth = 0f;
     public float Health { get; set; }
 
+    private bool isDie = false;
+
     public Action damagedEvent;
+
+    private PlayerController playerController;
+    private PlayerPower playerPower;
     private void Start()
     {
         Health = maxHealth;
-    }
-
-    private void Update()
-    {
-        Healing();
-    }
-
-    private void Healing()
-    {
-        /*if (isAttack || isHealing)
-        {
-            return;
-        }
-
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            //
-        }*/
+        playerController = GetComponent<PlayerController>();
+        playerPower = GetComponent<PlayerPower>();
     }
 
     public void Damaged(float damage, Vector3 direction)
     {
-        Health -= damage;
+        if (isDie || playerController.isDodge) return;
+ 
+        if(playerController.isGaurd)
+        {
+            Health -= damage * 0.33f;
+            playerPower.DecreasePower(playerController.gaurdNPower);
+        }
+        else
+        {
+            Health -= damage;
+        }
+
+        Health = Mathf.Clamp(Health, 0f, maxHealth);
 
         damagedEvent();
         //방향 따라 넉백
@@ -42,11 +43,12 @@ public class PlayerHealth : MonoBehaviour, IDamage
         if (Health <= 0)
         {
             Die();
-        }
+        }     
     }
 
     private void Die()
     {
-        GetComponent<PlayerAnimation>().DieAnim();
+        isDie = true;
+        playerController.animator.DieAnim();
     }
 }

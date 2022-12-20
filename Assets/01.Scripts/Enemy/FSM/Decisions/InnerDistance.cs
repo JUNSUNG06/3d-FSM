@@ -7,7 +7,7 @@ public class InnerDistance : AIDecision
     [SerializeField] private float distance = 0f;
     [SerializeField] private GameObject player;
 
-    private void Start()
+    protected override void Start()
     {
         player = GameObject.Find("Player").gameObject;
     }
