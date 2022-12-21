@@ -22,6 +22,14 @@ public class AIState : MonoBehaviour
         }
     }
 
+    public void EndState()
+    {
+        foreach (AIAction action in actions)
+        {
+            action.OnEndActino();
+        }
+    }
+
     public void StateUpdate()
     {
         foreach(AIAction action in actions)

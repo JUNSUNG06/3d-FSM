@@ -5,6 +5,7 @@ using UnityEngine;
 public class IsAttack : AIDecision
 {
     private BossAttackManage attack;
+    private bool a;
 
     protected override void Start()
     {
@@ -15,6 +16,7 @@ public class IsAttack : AIDecision
 
     public override bool MakeADecision()
     {
-        return attack.isAttack == false;
+        a = (attack.isAttack == false);
+        return a;
     }
 }

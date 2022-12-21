@@ -19,10 +19,12 @@ public class AIBrain : MonoBehaviour
     private void Update()
     {
         currentState.StateUpdate();
+        Debug.Log(currentState.transform.name);
     }
 
     public void ChangeState(AIState nextState)
     {
+        
         currentState = nextState;
         currentState.StateStart();
     }

@@ -10,11 +10,14 @@ public class CheckAttackType : AIDecision
 
     protected override void Start()
     {
+        base.Start();
+
         anim = brain.GetComponent<BossAnim>();
     }
 
     public override bool MakeADecision()
     {
-        return anim.GetSecondaryAttackType() == attackType;
+        Debug.Log(anim.GetSecondaryAttackType());
+        return (anim.GetSecondaryAttackType() == attackType);
     }
 }

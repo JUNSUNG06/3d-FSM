@@ -12,5 +12,6 @@ public abstract class AIAction : MonoBehaviour
     }
 
     public virtual void OnStartAction() { }
+    public virtual void OnEndActino() { }
     public abstract void TakeAction();
 }

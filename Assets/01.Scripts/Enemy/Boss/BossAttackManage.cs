@@ -54,5 +54,6 @@ public class BossAttackManage : MonoBehaviour
     public void EndOfAttack()
     {
         isAttack = false;
+        Debug.Log("ffalse");
     }
 }
