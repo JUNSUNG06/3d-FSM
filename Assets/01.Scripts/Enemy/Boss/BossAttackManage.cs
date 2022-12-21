@@ -21,7 +21,7 @@ public class BossAttackManage : MonoBehaviour
 
     public void CheckHit()
     {
-        Collider[] col = Physics.OverlapSphere(transform.position + transform.forward + Vector3.up, 1f, 1 << 10);
+        Collider[] col = Physics.OverlapSphere(transform.position + transform.forward + Vector3.up, 1.5f, 1 << 10);
 
         if (col.Length > 0)
         {
@@ -38,6 +38,7 @@ public class BossAttackManage : MonoBehaviour
     public void EndJumpAttack()
     {
         nav.destination = brain.transform.position;
+        PlayerCamera.Instance.ShakeCam(3.5f, 0.3f);
     }
 
     public void CheckJumpAttackHit()

@@ -11,6 +11,8 @@ public class PlayerCamera : MonoBehaviour
     private CinemachineBasicMultiChannelPerlin _actionPerlin = null;
     private CinemachineVirtualCamera playerCamera = null;
 
+    [SerializeField] private bool isFocus = false;
+
     private void Awake()
     {
         if(Instance == null)
@@ -28,7 +30,9 @@ public class PlayerCamera : MonoBehaviour
 
     private void Update()
     {
-        LookAround();
+        if(!isFocus)
+            LookAround();
+        Focus();
     }
 
     private void LookAround()
@@ -47,6 +51,39 @@ public class PlayerCamera : MonoBehaviour
         }
 
         cameraArm.rotation = Quaternion.Euler(camAngle.x - mousedelta.y, camAngle.y + mousedelta.x, camAngle.z);
+    }
+
+    private void Focus()
+    {
+        Transform target = null;
+
+        if(Input.GetKeyDown(KeyCode.Q))
+        {
+            if(!isFocus && SerchTarget(out target))
+            {
+                isFocus = true;
+                playerCamera.LookAt = target;
+            }
+            else
+            {
+                isFocus = false;
+                playerCamera.LookAt = null;
+            }
+        }
+    }
+
+    private bool SerchTarget(out Transform target)
+    {
+        Collider[] col = Physics.OverlapSphere(transform.position, 20f, 1 << 11);
+
+        if(col.Length > 0)
+        {
+            target = col[0].transform;
+            return true;
+        }
+
+        target = null;
+        return false;
     }
 
     public void ShakeCam(float intensity, float time)

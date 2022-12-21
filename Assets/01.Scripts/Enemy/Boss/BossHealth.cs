@@ -39,5 +39,6 @@ public class BossHealth : MonoBehaviour, IDamage
 
         isDie = true;
         GetComponent<BossAnim>().DieAnim();
+        GetComponent<AIBrain>().enabled = false;
     }
 }

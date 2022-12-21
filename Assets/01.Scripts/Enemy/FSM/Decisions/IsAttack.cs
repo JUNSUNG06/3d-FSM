@@ -15,6 +15,6 @@ public class IsAttack : AIDecision
 
     public override bool MakeADecision()
     {
-        return attack.isAttack;
+        return attack.isAttack == false;
     }
 }

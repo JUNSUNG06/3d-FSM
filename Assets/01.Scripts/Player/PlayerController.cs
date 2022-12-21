@@ -50,6 +50,7 @@ public class PlayerController : MonoBehaviour
     public Transform cameraArm;
 
     private bool dodgeToCameraDir = false;
+    private bool dodgeToMoveDir = false;
 
     private void Awake()
     {
@@ -86,15 +87,19 @@ public class PlayerController : MonoBehaviour
         {
             if((Mathf.Abs(x) <= 0f && Mathf.Abs(z) <= 0f))
             {
-                moveVector = dodgeDir * dodgeSpeed;
-                dodgeToCameraDir = true;
-                Turn(dodgeDir, true);
+                if(!dodgeToMoveDir)
+                {
+                    moveVector = dodgeDir * dodgeSpeed;
+                    dodgeToCameraDir = true;
+                    Turn(dodgeDir, true);
+                }
             }
             else
             {
                 if(!dodgeToCameraDir)
                 {
                     moveVector = moveDir * dodgeSpeed;
+                    dodgeToMoveDir = true;
                     Turn(moveDir, true);
                 } 
             }
@@ -206,7 +211,8 @@ public class PlayerController : MonoBehaviour
 
         if(Input.GetMouseButtonDown(0))
         {
-            Turn(forward, true);
+            if (Mathf.Abs(Input.GetAxisRaw("Horizontal")) <= 0f && Mathf.Abs(Input.GetAxisRaw("Vertical")) <= 0f)
+                Turn(forward, true);
             isAttack = true;
             powerControl.DecreasePower(attackNPower);
 
@@ -264,6 +270,7 @@ public class PlayerController : MonoBehaviour
     {
         isDodge = false;
         dodgeToCameraDir = false;
+        dodgeToMoveDir = false;
     }
 
     private void Healing()
@@ -289,13 +296,13 @@ public class PlayerController : MonoBehaviour
 
     public void CheckAttack()
     {
-        Collider[] col = Physics.OverlapSphere(transform.position + transform.forward * 0.7f + Vector3.up, 0.35f, 1 << 9);
+        Collider[] col = Physics.OverlapSphere(transform.position + transform.forward * 0.9f + Vector3.up, 0.9f, 1 << 9);
 
         if(col.Length > 0)
         {
             col[0].GetComponent<IDamage>().Damaged(attakcPower, Vector3.zero);
             PlayerCamera.Instance.ShakeCam(3, 0.1f);
-        }
+        }       
     }
 
 #if UNITY_EDITOR

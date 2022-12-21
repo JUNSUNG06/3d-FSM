@@ -38,7 +38,11 @@ public class PlayerHealth : MonoBehaviour, IDamage
         Health = Mathf.Clamp(Health, 0f, maxHealth);
 
         damagedEvent();
-        //방향 따라 넉백
+        
+        if(!playerController.isHealing)
+        {
+            PlayerCamera.Instance.ShakeCam(6f, 0.1f);
+        }
 
         if (Health <= 0)
         {
@@ -50,5 +54,6 @@ public class PlayerHealth : MonoBehaviour, IDamage
     {
         isDie = true;
         playerController.animator.DieAnim();
+        playerController.enabled = false;
     }
 }
