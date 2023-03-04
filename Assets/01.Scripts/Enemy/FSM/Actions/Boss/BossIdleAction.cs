@@ -18,12 +18,12 @@ public class BossIdleAction : AIAction
 
     public override void TakeAction()
     {
-        anim.IdleAnim();
         Idle();
     }    
 
     private void Idle()
     {
+        anim.IdleAnimImmediately();
         Turn();
     }
 

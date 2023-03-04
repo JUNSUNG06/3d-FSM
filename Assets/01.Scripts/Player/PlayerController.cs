@@ -284,7 +284,9 @@ public class PlayerController : MonoBehaviour
         {
             animator.HealingAnim();
             isHealing = true;
-            healthControl.Damaged(-healthControl.maxHealth * 7 * 0.1f, Vector3.zero);   
+            //healthControl.Damaged(-healthControl.maxHealth * 7 * 0.1f, Vector3.zero);
+            healthControl.Health += healthControl.maxHealth * 7 * 0.1f;
+            healthControl.damagedEvent();
             healCount--;
         }
     }

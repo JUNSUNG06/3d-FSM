@@ -6,8 +6,20 @@ using UnityEngine;
 public class PlayerHealth : Health
 {
     public float maxHealth = 0f;
-    public float Health { get; set; }
+    public float Health
+    {
+        get
+        {
+            return health;
+        }
 
+        set
+        {
+            health = value;
+            health = Mathf.Clamp(health, 0, 100);
+        }
+    }
+    private float health;
     private bool isDie = false;
 
     public Action damagedEvent;
@@ -16,7 +28,7 @@ public class PlayerHealth : Health
     private PlayerPower playerPower;
     private void Start()
     {
-        Health = maxHealth;
+        health = maxHealth;
         playerController = GetComponent<PlayerController>();
         playerPower = GetComponent<PlayerPower>();
     }
@@ -27,25 +39,28 @@ public class PlayerHealth : Health
  
         if(playerController.isGaurd)
         {
-            Health -= damage * 0.33f;
+            health -= damage * 0.33f;
             playerPower.DecreasePower(playerController.gaurdNPower);
         }
         else
         {
-            Health -= damage;
+            health -= damage;
         }
 
-        Health = Mathf.Clamp(Health, 0f, maxHealth);
+        health = Mathf.Clamp(health, 0f, maxHealth);
 
         damagedEvent();
-        
-        if(!playerController.isHealing)
+
+        /*f(!playerController.isHealing)
         {
             PlayerCamera.Instance.ShakeCam(6f, 0.1f);
             PoolManager.Instance.Pop("Blood Splash", transform.position);
-        }
+        }*/
 
-        if (Health <= 0)
+        PlayerCamera.Instance.ShakeCam(6f, 0.1f);
+        PoolManager.Instance.Pop("Blood Splash", transform.position);
+
+        if (health <= 0)
         {
             Die();
         }     

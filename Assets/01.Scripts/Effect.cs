@@ -4,15 +4,21 @@ using UnityEngine;
 
 public class Effect : Poolable
 {
+    public enum EffectType
+    {
+        PARTICLE,
+        SOUND
+    }
+    public EffectType effectType;
+
     private ParticleSystem particle;
 
-    private void Awake()
-    {
-        particle = GetComponent<ParticleSystem>();
-    }
     public override void Reset()
     {
-        particle.Play();
+        if (effectType == EffectType.PARTICLE)
+            PlayEffect();
+        else if (effectType == EffectType.SOUND)
+            PlaySound();
         StartCoroutine(Push());
     }
 
@@ -21,5 +27,17 @@ public class Effect : Poolable
         yield return new WaitForSeconds(1);
 
         PoolManager.Instance.Push(this);
+    }
+
+    private void PlayEffect()
+    {
+        GetComponent<ParticleSystem>().Play();
+    }
+
+    private void PlaySound()
+    {
+        AudioSource audioSource = GetComponent<AudioSource>(); 
+        //audioSource.pitch = UnityEngine.Random.Range(0.8f, 1.2f);
+        audioSource.Play();
     }
 }

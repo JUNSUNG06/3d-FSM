@@ -59,6 +59,13 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
+      - time: 0.39764175
+        functionName: PlaySwingSound
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 4a513f2155dc1c94baba42cc39a0163f, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       - time: 0.4219858
         functionName: CheckAttack
         data: 

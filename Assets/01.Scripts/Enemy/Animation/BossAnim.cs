@@ -21,6 +21,10 @@ public class BossAnim : MonoBehaviour
     {
         animator.SetFloat(movementHash, Mathf.Lerp(animator.GetFloat(movementHash), 0f, Time.deltaTime * animChangeSpeed));
     }
+    public void IdleAnimImmediately()
+    {
+        animator.SetFloat(movementHash, 0);
+    }
 
     public void MoveAnim()
     {
