@@ -6,8 +6,8 @@ public class PoolManager : MonoBehaviour
 {
     public static PoolManager Instance { get; private set; }
 
-    public List<IPoolable> poolObjectList;
-    public Dictionary<string, List<IPoolable>> pool = new Dictionary<string, List<IPoolable>>();
+    public List<Poolable> poolObjectList;
+    public Dictionary<string, Pool<Poolable>> poolList = new Dictionary<string, Pool<Poolable>>();
 
     private void Awake()
     {
@@ -19,20 +19,44 @@ public class PoolManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
 
-        foreach(IPoolable prefab in poolObjectList)
+    private void Start()
+    {
+        CreatePool();
+    }
+
+    public Poolable Pop(string name, Vector3 position)
+    {
+        if (!poolList.ContainsKey(name))
         {
-            IPoolable obj = GameObject.Instantiate(prefab);
+            Debug.Log("풀 없음");
+            return null;
         }
+
+        Poolable obj = poolList[name].Pop();
+        obj.transform.position = position;
+        obj.Reset();
+        return obj;
     }
 
-    public void Pop(string name)
+    public void Push(Poolable obj)
     {
-        
+        if(!poolList.ContainsKey(obj.gameObject.name))
+        {
+            Debug.Log("풀 없음");
+            return;
+        }
+
+        poolList[obj.gameObject.name].Push(obj);
     }
 
-    public void Push(IPoolable obj)
+    private void CreatePool()
     {
-
+        foreach(Poolable poolObj in poolObjectList)
+        {
+            Pool<Poolable> pool = new Pool<Poolable>(poolObj, transform);
+            poolList.Add(poolObj.gameObject.name, pool);
+        }
     }
 }

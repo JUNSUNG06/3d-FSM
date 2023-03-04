@@ -284,7 +284,7 @@ public class PlayerController : MonoBehaviour
         {
             animator.HealingAnim();
             isHealing = true;
-            healthControl.Damaged(-healthControl.maxHealth * 7 * 0.1f, Vector3.zero);
+            healthControl.Damaged(-healthControl.maxHealth * 7 * 0.1f, Vector3.zero);   
             healCount--;
         }
     }
@@ -300,7 +300,7 @@ public class PlayerController : MonoBehaviour
 
         if(col.Length > 0)
         {
-            col[0].GetComponent<IDamage>().Damaged(attakcPower, Vector3.zero);
+            col[0].GetComponent<Health>().Damaged(attakcPower, Vector3.zero);
             PlayerCamera.Instance.ShakeCam(3, 0.1f);
         }       
     }

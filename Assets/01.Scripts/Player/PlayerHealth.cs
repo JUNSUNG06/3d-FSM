@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerHealth : MonoBehaviour, IDamage
+public class PlayerHealth : Health
 {
     public float maxHealth = 0f;
     public float Health { get; set; }
@@ -21,7 +21,7 @@ public class PlayerHealth : MonoBehaviour, IDamage
         playerPower = GetComponent<PlayerPower>();
     }
 
-    public void Damaged(float damage, Vector3 direction)
+    public override void Damaged(float damage, Vector3 direction)
     {
         if (isDie || playerController.isDodge) return;
  
@@ -42,6 +42,7 @@ public class PlayerHealth : MonoBehaviour, IDamage
         if(!playerController.isHealing)
         {
             PlayerCamera.Instance.ShakeCam(6f, 0.1f);
+            PoolManager.Instance.Pop("Blood Splash", transform.position);
         }
 
         if (Health <= 0)
@@ -50,7 +51,7 @@ public class PlayerHealth : MonoBehaviour, IDamage
         }     
     }
 
-    private void Die()
+    protected override void Die()
     {
         isDie = true;
         playerController.animator.DieAnim();

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class BossHealth : MonoBehaviour, IDamage
+public class BossHealth : Health
 {
     public float maxHealth = 0f;
     public float Health { get; set; }
@@ -17,7 +17,7 @@ public class BossHealth : MonoBehaviour, IDamage
         Health = maxHealth;
     }
 
-    public void Damaged(float damage, Vector3 direction)
+    public override void Damaged(float damage, Vector3 direction)
     {
         Debug.Log("boss damaged");
 
@@ -25,15 +25,16 @@ public class BossHealth : MonoBehaviour, IDamage
 
         Health -= damage;
         damagedEvent?.Invoke();
+        PoolManager.Instance.Pop("Blood Splash", transform.position);
 
-        if(Health <= 0f)
+        if (Health <= 0f)
         {
             Die();
         }
         
     }
 
-    private void Die()
+    protected override void Die()
     {
         Debug.Log("die");
 
