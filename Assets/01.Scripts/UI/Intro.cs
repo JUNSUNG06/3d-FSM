@@ -54,8 +54,6 @@ public class Intro : MonoBehaviour
 
         yield return new WaitForSeconds(1);
 
-        GameObject.Find("Cinematic").GetComponent<PlayableDirector>().Play();
-
         while (true)//텍스트 페이드
         {
             Color color = textMaterial.GetColor("_FaceColor");
@@ -71,6 +69,8 @@ public class Intro : MonoBehaviour
 
             yield return null;
         }
+
+        GameObject.Find("Cinematic").GetComponent<PlayableDirector>().Play();
 
         introPanel.SetActive(false);
         settingPanel.SetActive(false);
