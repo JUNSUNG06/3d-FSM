@@ -25,6 +25,7 @@ public class BossAttackManage : MonoBehaviour
 
         if (col.Length > 0)
         {
+            Debug.Log(col[0]);
             col[0].GetComponent<Health>().Damaged(attackPower, Vector3.zero);
         }
     }
