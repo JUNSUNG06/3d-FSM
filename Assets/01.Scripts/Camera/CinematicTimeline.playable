@@ -149,7 +149,7 @@ AnimationClip:
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 9
+    m_StopTime: 8.916667
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -215,14 +215,7 @@ AnimationClip:
   m_EulerEditorCurves: []
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
-  m_Events:
-  - time: 9
-    functionName: ActiveCharacters
-    data: 
-    objectReferenceParameter: {fileID: 11500000, guid: 33c39bd5c4d5bf9488ce13df0a5144a4, type: 3}
-    floatParameter: 0
-    intParameter: 0
-    messageOptions: 0
+  m_Events: []
 --- !u!114 &-552559775250423601
 MonoBehaviour:
   m_ObjectHideFlags: 1
