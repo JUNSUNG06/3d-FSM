@@ -29,6 +29,11 @@ public class PlayerAnimation : MonoBehaviour
         animator.SetFloat(movementHash, Mathf.Lerp(animator.GetFloat(movementHash), threshold, Time.deltaTime * ChangeMovementAnimSpeed));
     }
 
+    public void IdleAnim()
+    {
+        animator.SetFloat(movementHash, 0f);
+    }
+
     public void AttackAnim()
     {
         animator.SetTrigger(attackHash);

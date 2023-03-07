@@ -71,6 +71,11 @@ public class PlayerController : MonoBehaviour
         Healing();
     }
 
+    private void OnDisable()
+    {
+        animator.IdleAnim();
+    }
+
     private void Move()
     {
         float x = Input.GetAxisRaw("Horizontal");

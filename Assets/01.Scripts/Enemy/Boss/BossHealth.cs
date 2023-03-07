@@ -11,6 +11,7 @@ public class BossHealth : Health
     private bool isDie = false;
 
     public Action damagedEvent;
+    public ParticleSystem deadEffect;
 
     private void Start()
     {
@@ -25,7 +26,7 @@ public class BossHealth : Health
 
         Health -= damage;
         damagedEvent?.Invoke();
-        PoolManager.Instance.Pop("Blood Splash", transform.position);
+        PoolManager.Instance.Pop("Blood Splash 1", transform.position);
 
         if (Health <= 0f)
         {
@@ -39,6 +40,7 @@ public class BossHealth : Health
         Debug.Log("die");
 
         isDie = true;
+        Instantiate(deadEffect, transform.position, Quaternion.identity);
         GetComponent<BossAnim>().DieAnim();
         GetComponent<AIBrain>().enabled = false;
     }
