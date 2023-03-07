@@ -12,6 +12,10 @@ public class BossAnim : MonoBehaviour
 
     public float animChangeSpeed = 0f;
 
+    public Transform particlePositionTransform;
+    public ParticleSystem dirParticle;
+
+
     private void Awake()
     {
         animator = GetComponent<Animator>();
@@ -49,5 +53,12 @@ public class BossAnim : MonoBehaviour
     public int GetSecondaryAttackType()
     {
         return animator.GetInteger(secondaryAttackHash);
+    }
+
+    public void DieEvent()
+    {
+        FindObjectOfType<UIManager>().ActiveOverPanel();
+        dirParticle.Play();
+        dirParticle.transform.position = particlePositionTransform.position;
     }
 }
