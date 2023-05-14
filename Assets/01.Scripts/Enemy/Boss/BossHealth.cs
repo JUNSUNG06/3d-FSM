@@ -25,6 +25,8 @@ public class BossHealth : Health
         if(isDie) return;
 
         Health -= damage;
+        Health = Mathf.Clamp(Health, 0, maxHealth);
+
         damagedEvent?.Invoke();
         PoolManager.Instance.Pop("Blood Splash 1", transform.position);
 
