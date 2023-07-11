@@ -47,9 +47,14 @@ public class Intro : MonoBehaviour
     IEnumerator SetStartGame()
     {
         ChangeActivePanel(introPanel);
+        Debug.Log(activePanel);
         foreach (Transform child in activePanel.transform)
         {
-            child.GetComponent<Button>().interactable = false;
+            if(child.TryGetComponent<Button>(out Button button))
+            {
+                button.interactable = false;
+            }
+            //child.GetComponent<Button>().interactable = false;
         }
 
         yield return new WaitForSeconds(1);
