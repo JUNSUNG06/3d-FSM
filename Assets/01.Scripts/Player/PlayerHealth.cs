@@ -59,6 +59,7 @@ public class PlayerHealth : Health
 
         PlayerCamera.Instance.ShakeCam(6f, 0.1f);
         PoolManager.Instance.Pop("Blood Splash", transform.position);
+        PoolManager.Instance.Pop("HitSound", transform.position);
 
         if (health <= 0)
         {

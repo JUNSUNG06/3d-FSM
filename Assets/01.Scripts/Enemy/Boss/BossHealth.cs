@@ -29,7 +29,7 @@ public class BossHealth : Health
 
         damagedEvent?.Invoke();
         PoolManager.Instance.Pop("Blood Splash 1", transform.position);
-
+        PoolManager.Instance.Pop("HitSound", transform.position);
         if (Health <= 0f)
         {
             Die();
